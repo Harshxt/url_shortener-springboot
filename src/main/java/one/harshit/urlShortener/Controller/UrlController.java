@@ -36,6 +36,7 @@ public class UrlController {
         Url returnedUrl = service.addUrl(url);
         String shortenedUrl = returnedUrl.getShortenedUrl();
         returnedUrl.setShortenedUrl("https://localhost:8080/" + shortenedUrl);
+        
         return new ResponseEntity<>(returnedUrl, HttpStatus.OK);
 
     }
@@ -49,6 +50,21 @@ public class UrlController {
 
     }
 
-   
+    // Payload : {"shortenedUrl": "abc", "newUrl": "https://google.com/"}
+    @PutMapping("/add/")
+    public ResponseEntity<String> modifyUrl(@RequestBody Map<String, String> payload) {
+        String shortenedUrl = payload.getOrDefault("shortenedUrl", null);
+        String redirectUrl = payload.getOrDefault("newUrl", null);
+        Url newUrl = new Url(shortenedUrl, redirectUrl);
+        if (service.urlExists(shortenedUrl)) {
+            service.modifyUrl(newUrl);
+            return ResponseEntity.ok(newUrl.toString());
+        }
+        System.err.println(service.urlExists(shortenedUrl));
+        return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+
+       
+
+    }
 
 }

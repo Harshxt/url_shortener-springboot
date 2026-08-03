@@ -16,7 +16,7 @@ public class UrlService {
     public Url addUrl(String redirectUrl) {
         Url url = new Url();
         url.setRedirectUrl(redirectUrl);
-        
+
         url.setVisitCount(0);
         repo.save(url);
         return url;
@@ -25,5 +25,17 @@ public class UrlService {
     public void deleteUrl(String shortenedUrl) {
 
         repo.deleteById(shortenedUrl);
+    }
+
+    public void modifyUrl(Url url) {
+        repo.save(url);
+    }
+
+    public boolean urlExists(String shortenedUrl) {
+        Url url = repo.findById(shortenedUrl).get();
+        if (url!=null)
+            return true;
+        else
+            return false;
     }
 }

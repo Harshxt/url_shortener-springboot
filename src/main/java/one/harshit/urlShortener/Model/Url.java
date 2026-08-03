@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Url {
+    public Url(String shortenedUrl, String redirectUrl) {
+        this.shortenedUrl = shortenedUrl;
+        this.redirectUrl = redirectUrl;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     // private String id;
