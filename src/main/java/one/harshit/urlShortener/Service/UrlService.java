@@ -21,4 +21,9 @@ public class UrlService {
         repo.save(url);
         return url;
     }
+
+    public void deleteUrl(String shortenedUrl) {
+
+        repo.deleteById(shortenedUrl);
+    }
 }
