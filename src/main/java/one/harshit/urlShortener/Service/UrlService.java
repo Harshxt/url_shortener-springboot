@@ -1,6 +1,5 @@
 package one.harshit.urlShortener.Service;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import one.harshit.urlShortener.Exceptions.UrlNotFoundException;
@@ -25,11 +24,10 @@ public class UrlService {
     }
 
     public void deleteUrl(String shortenedUrl) {
-        try {
-            repo.deleteById(shortenedUrl);
-        } catch (EmptyResultDataAccessException e) {
-            throw new UrlNotFoundException("Url not found:  " + shortenedUrl);
+        if (!repo.existsById(shortenedUrl)) {
+            throw new UrlNotFoundException("Url not found: " + shortenedUrl);
         }
+        repo.deleteById(shortenedUrl);
     }
 
     public void modifyUrl(Url url) {
