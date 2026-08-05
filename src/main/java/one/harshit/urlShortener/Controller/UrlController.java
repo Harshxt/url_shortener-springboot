@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import one.harshit.urlShortener.Exceptions.UrlNotFoundException;
 import one.harshit.urlShortener.Model.Url;
 import one.harshit.urlShortener.Service.UrlService;
 
@@ -30,7 +32,7 @@ public class UrlController {
     }
 
     @PostMapping("/add/")
-    public ResponseEntity<Url> addUrl(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<Url> addUrl(@RequestBody Map<String, String> payload)  {
 
         String url = payload.getOrDefault("url", null);
         Url returnedUrl = service.addUrl(url);
@@ -42,11 +44,14 @@ public class UrlController {
     }
 
     @DeleteMapping("/{url}")
-    public ResponseEntity<String> deleteUrl(@PathVariable("url") String shortenedUrl) {
-        System.out.println(shortenedUrl);
+    public ResponseEntity<String> deleteUrl(@PathVariable("url") String shortenedUrl)  {
+        
         service.deleteUrl(shortenedUrl);
-
         return ResponseEntity.ok("Deleted");
+        
+        
+
+        
 
     }
 
@@ -65,6 +70,11 @@ public class UrlController {
 
        
 
+    }
+
+    @ExceptionHandler(UrlNotFoundException.class)
+    public ResponseEntity<?> handleUrlNotFoundException(UrlNotFoundException exception){
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 }
