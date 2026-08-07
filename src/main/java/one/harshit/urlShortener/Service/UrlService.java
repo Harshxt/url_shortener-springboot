@@ -37,4 +37,9 @@ public class UrlService {
     public boolean urlExists(String shortenedUrl) {
         return repo.existsById(shortenedUrl);
     }
+
+    public String findById(String shortenedUrl) {
+        Url url = repo.findById(shortenedUrl).get();
+        return url.getRedirectUrl();
+    }
 }
